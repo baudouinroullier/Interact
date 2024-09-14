@@ -2,46 +2,69 @@
 
 namespace act
 {
-Drag::Drag(std::function<void(sf::Shape&, State)>&& callback) :
+Drag::Drag(std::function<void(sf::Shape&, bool)>&& callback) :
     m_stateChangeCallback{std::move(callback)}
 {
 }
 
-void Drag::setStateChangeCallback(std::function<void(sf::Shape&, Drag::State)> callback)
+void Drag::setStateChangeCallback(std::function<void(sf::Shape&, bool)> callback)
 {
     m_stateChangeCallback = callback;
 }
 
 bool Drag::processEvent(sf::Event event, sf::Shape& shape)
 {
-    State oldState = state;
+    bool oldActive = m_active;
 
-    if (state == State::None && event.type == sf::Event::EventType::MouseMoved && shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+    if (!m_active &&
+        event.type == sf::Event::EventType::MouseButtonPressed &&
+        event.mouseButton.button == sf::Mouse::Button::Left &&
+        shape.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
     {
-        state = State::Hover;
+        m_active = true;
+        m_relClickPos = shape.getPosition() - sf::Vector2f{event.mouseButton.x, event.mouseButton.y};
     }
-    else if (state == State::Hover)
-    {
-        if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Left)
-        {
-            state = State::Drag;
-            m_relClickPos = shape.getPosition() - sf::Vector2f{event.mouseButton.x, event.mouseButton.y};
-        }
-        else if (event.type == sf::Event::EventType::MouseMoved && !shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
-            state = State::None;
-    }
-    else if (state == State::Drag)
+    else if (m_active)
     {
         if (event.type == sf::Event::EventType::MouseButtonReleased)
-            state = State::Hover;
+            m_active = false;
         else if (event.type == sf::Event::MouseMoved)
             shape.setPosition(m_relClickPos + sf::Vector2f{event.mouseMove.x, event.mouseMove.y});
     }
 
-    if (oldState != state)
-        m_stateChangeCallback(shape, state);
+    if (oldActive != m_active)
+        m_stateChangeCallback(shape, m_active);
 
-    return oldState != state;
+    return oldActive != m_active;
+}
+
+Hover::Hover(std::function<void(sf::Shape&, bool)>&& callback) :
+    m_stateChangeCallback{std::move(callback)}
+{
+}
+
+void Hover::setStateChangeCallback(std::function<void(sf::Shape&, bool)> callback)
+{
+    m_stateChangeCallback = callback;
+}
+
+bool Hover::processEvent(sf::Event event, sf::Shape& shape)
+{
+    bool oldActive = m_active;
+
+    if (!m_active &&
+        event.type == sf::Event::EventType::MouseMoved &&
+        shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+        m_active = true;
+    else if (m_active &&
+             event.type == sf::Event::EventType::MouseMoved &&
+             !shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+        m_active = false;
+
+    if (oldActive != m_active)
+        m_stateChangeCallback(shape, m_active);
+
+    return oldActive != m_active;
 }
 
 } // namespace act

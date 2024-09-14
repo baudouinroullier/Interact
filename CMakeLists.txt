@@ -17,4 +17,3 @@ target_include_directories(${LIB_NAME} PRIVATE "include/Interact")
 
 ## sfml
 target_link_libraries(${LIB_NAME} sfml-graphics sfml-window sfml-system)
-
