@@ -2,48 +2,46 @@
 
 namespace act
 {
-Draggable::Draggable(sf::Shape* shape) :
-    m_shape(shape)
+Drag::Drag(std::function<void(sf::Shape&, State)>&& callback) :
+    m_stateChangeCallback{std::move(callback)}
 {
 }
 
-void Draggable::setShape(sf::Shape* shape)
-{
-    m_shape = shape;
-}
-
-void Draggable::setStateChangeCallback(std::function<void(sf::Shape&, Draggable::MoveState)> callback)
+void Drag::setStateChangeCallback(std::function<void(sf::Shape&, Drag::State)> callback)
 {
     m_stateChangeCallback = callback;
 }
 
-void Draggable::processEvent(sf::Event e)
+bool Drag::processEvent(sf::Event event, sf::Shape& shape)
 {
-    MoveState oldState = state;
+    State oldState = state;
 
-    if (state == None && e.type == sf::Event::EventType::MouseMoved && m_shape->getGlobalBounds().contains(e.mouseMove.x, e.mouseMove.y))
-        state = Hover;
-    else if (state == Hover)
+    if (state == State::None && event.type == sf::Event::EventType::MouseMoved && shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
     {
-        if (e.type == sf::Event::EventType::MouseButtonPressed && e.mouseButton.button == sf::Mouse::Button::Left)
-        {
-            state = Drag;
-            m_relClickPos = m_shape->getPosition() - sf::Vector2f{e.mouseButton.x, e.mouseButton.y};
-        }
-        else if (e.type == sf::Event::EventType::MouseMoved && !m_shape->getGlobalBounds().contains(e.mouseMove.x, e.mouseMove.y))
-            state = None;
+        state = State::Hover;
     }
-    else if (state == Drag)
+    else if (state == State::Hover)
     {
-        if (e.type == sf::Event::EventType::MouseButtonReleased)
-            state = Hover;
-        else if (e.type == sf::Event::MouseMoved)
-            m_shape->setPosition(m_relClickPos + sf::Vector2f{e.mouseMove.x, e.mouseMove.y});
+        if (event.type == sf::Event::EventType::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Button::Left)
+        {
+            state = State::Drag;
+            m_relClickPos = shape.getPosition() - sf::Vector2f{event.mouseButton.x, event.mouseButton.y};
+        }
+        else if (event.type == sf::Event::EventType::MouseMoved && !shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+            state = State::None;
+    }
+    else if (state == State::Drag)
+    {
+        if (event.type == sf::Event::EventType::MouseButtonReleased)
+            state = State::Hover;
+        else if (event.type == sf::Event::MouseMoved)
+            shape.setPosition(m_relClickPos + sf::Vector2f{event.mouseMove.x, event.mouseMove.y});
     }
 
     if (oldState != state)
-        m_stateChangeCallback(*m_shape, state);
+        m_stateChangeCallback(shape, state);
 
+    return oldState != state;
 }
 
 } // namespace act

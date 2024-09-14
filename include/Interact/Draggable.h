@@ -3,31 +3,32 @@
 
 #include <SFML/Graphics.hpp>
 #include <functional>
+#include <memory>
 
 namespace act
 {
-class Draggable : public sf::Drawable
+class Interaction
 {
 public:
-    enum MoveState
+    virtual bool processEvent(sf::Event event, sf::Shape& shape) = 0;
+};
+
+class Drag : public Interaction
+{
+public:
+    enum class State
     {
         None, Hover, Drag
-    } state = None;
+    } state = State::None;
 
-    Draggable(sf::Shape* shape = nullptr);
+    Drag(std::function<void(sf::Shape& shape, State state)>&& callback);
 
-    void setShape(sf::Shape* shape);
-    void setStateChangeCallback(std::function<void(sf::Shape& shape, MoveState state)> callback);
-    void processEvent(sf::Event e);
+    void setStateChangeCallback(std::function<void(sf::Shape& shape, State state)> callback);
+    bool processEvent(sf::Event event, sf::Shape& shape) override;
 
 protected:
-    void draw(sf::RenderTarget& target, sf::RenderStates states) const override
-    {
-        target.draw(*m_shape, states);
-    }
 
-    sf::Shape* m_shape = nullptr;
-    std::function<void(sf::Shape& shape, MoveState state)> m_stateChangeCallback;
+    std::function<void(sf::Shape& shape, State state)> m_stateChangeCallback;
     sf::Vector2f m_relClickPos;
 };
 }
