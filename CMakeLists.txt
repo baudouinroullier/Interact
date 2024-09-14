@@ -6,8 +6,9 @@ project(${LIB_NAME} CXX)
 ## Build static library
 
 add_library(${LIB_NAME}
-    include/Interact/Draggable.h src/Draggable.cpp
+    include/Interact/Drag.h src/Drag.cpp
     include/Interact/Shape.h src/Shape.cpp
+    include/Interact/Interaction.h
 )
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 20)
 set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)

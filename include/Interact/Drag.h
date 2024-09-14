@@ -1,17 +1,13 @@
-#ifndef DRAGGABLE_H
-#define DRAGGABLE_H
+#ifndef DRAG_H
+#define DRAG_H
 
 #include <SFML/Graphics.hpp>
 #include <functional>
 #include <memory>
+#include "Interaction.h"
 
 namespace act
 {
-class Interaction
-{
-public:
-    virtual bool processEvent(sf::Event event, sf::Shape& shape) = 0;
-};
 
 class Drag : public Interaction
 {
@@ -33,4 +29,4 @@ protected:
 };
 }
 
-#endif // DRAGGABLE_H
+#endif // DRAG_H

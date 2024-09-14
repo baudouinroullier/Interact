@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <vector>
-#include "Draggable.h"
+#include "Drag.h"
 
 namespace act
 {
