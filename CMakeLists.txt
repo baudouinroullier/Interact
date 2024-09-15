@@ -9,6 +9,8 @@ add_library(${LIB_NAME}
     include/Interact/Drag.h src/Drag.cpp
     include/Interact/Shape.h src/Shape.cpp
     include/Interact/Interaction.h
+    include/Interact/Hover.h
+    src/Hover.cpp
 )
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 20)
 set_target_properties(${LIB_NAME} PROPERTIES LINKER_LANGUAGE CXX)

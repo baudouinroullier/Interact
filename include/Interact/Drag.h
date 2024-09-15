@@ -1,5 +1,5 @@
-#ifndef DRAG_H
-#define DRAG_H
+#ifndef ACT_DRAG_H
+#define ACT_DRAG_H
 
 #include <SFML/Graphics.hpp>
 #include <functional>
@@ -23,19 +23,6 @@ protected:
     bool m_active = false;
 };
 
-class Hover : public Interaction
-{
-public:
-    Hover(std::function<void(sf::Shape& shape, bool)>&& callback);
-
-    void setStateChangeCallback(std::function<void(sf::Shape& shape, bool)> callback);
-    bool processEvent(sf::Event event, sf::Shape& shape) override;
-
-protected:
-
-    std::function<void(sf::Shape& shape, bool)> m_stateChangeCallback;
-    bool m_active = false;
-};
 }
 
-#endif // DRAG_H
+#endif // ACT_DRAG_H
