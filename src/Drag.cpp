@@ -32,8 +32,7 @@ bool Drag::processEvent(sf::Event event, sf::Shape& shape)
             shape.setPosition(m_relClickPos + sf::Vector2f{event.mouseMove.x, event.mouseMove.y});
     }
 
-    if (oldActive != m_active)
-        m_stateChangeCallback(shape, m_active);
+    m_stateChangeCallback(shape, m_active);
 
     return oldActive != m_active;
 }

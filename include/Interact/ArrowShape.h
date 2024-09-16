@@ -4,18 +4,31 @@
 namespace act
 {
 
-class ArrowShape : public sf::Shape
+class ArrowShape : public sf::Drawable
 {
 public:
-    ArrowShape();
+    ArrowShape(double width = 10);
 
-    std::size_t getPointCount() const override;
-    sf::Vector2f getPoint(std::size_t index) const override;
+    void setStartPosition(float x, float y);
+    void setStartPosition(const sf::Vector2f& position);
+    void setEndPosition(float x, float y);
+    void setEndPosition(const sf::Vector2f& position);
+    void setPosition(float x, float y);
+    void setPosition(const sf::Vector2f& position);
+    void moveStart(float offsetX, float offsetY);
+    void moveStart(const sf::Vector2f& offset);
+    void moveEnd(float offsetX, float offsetY);
+    void moveEnd(const sf::Vector2f& offset);
+    void move(float offsetX, float offsetY);
+    void move(const sf::Vector2f& offset);
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
+    void _computeVertexArray();
 
+    sf::Vector2f m_startPos, m_endPos;
+    double m_length, m_width;
     sf::VertexArray m_vArray;
 };
 }

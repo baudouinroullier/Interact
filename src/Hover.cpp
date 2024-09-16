@@ -25,8 +25,7 @@ bool Hover::processEvent(sf::Event event, sf::Shape& shape)
              !shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
         m_active = false;
 
-    if (oldActive != m_active)
-        m_stateChangeCallback(shape, m_active);
+    m_stateChangeCallback(shape, m_active);
 
     return oldActive != m_active;
 }
