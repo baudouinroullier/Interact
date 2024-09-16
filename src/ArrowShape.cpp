@@ -5,12 +5,12 @@
 namespace act
 {
 
-ArrowShape::ArrowShape(double width) :
+ArrowShape::ArrowShape(double width, sf::Color color) :
     m_width(width),
     m_vArray{sf::TriangleFan, 7}
 {
     for (int i = 0; i < m_vArray.getVertexCount(); ++i)
-        m_vArray[i].color = sf::Color::Red;
+        m_vArray[i].color = color;
 }
 
 void ArrowShape::setStartPosition(float x, float y)
