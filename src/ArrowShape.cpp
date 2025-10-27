@@ -7,7 +7,7 @@ namespace act
 
 ArrowShape::ArrowShape(double width, sf::Color color) :
     m_width(width),
-    m_vArray{sf::TriangleFan, 7}
+    m_vArray{sf::PrimitiveType::TriangleFan, 7}
 {
     for (int i = 0; i < m_vArray.getVertexCount(); ++i)
         m_vArray[i].color = color;
@@ -80,7 +80,7 @@ void ArrowShape::move(const sf::Vector2f& offset)
 void ArrowShape::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     const sf::Vector2f vec = m_endPos - m_startPos;
-    const double angle = 180 / M_PI * std::atan2(vec.y, vec.x);
+    const sf::Angle angle = sf::radians(std::atan2(vec.y, vec.x));
 
     sf::Transform t;
     t.translate(m_startPos).rotate(angle);

@@ -7,7 +7,7 @@ namespace act
 class Interaction
 {
 public:
-    virtual bool processEvent(sf::Event event, sf::Shape& shape) = 0;
+    virtual bool processEvent(std::optional<sf::Event> event, sf::Shape& shape) = 0;
 };
 
 } // namespace act

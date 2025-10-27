@@ -12,17 +12,16 @@ void Hover::setStateChangeCallback(std::function<void(sf::Shape&, bool)> callbac
     m_stateChangeCallback = callback;
 }
 
-bool Hover::processEvent(sf::Event event, sf::Shape& shape)
+bool Hover::processEvent(std::optional<sf::Event> event, sf::Shape& shape)
 {
     bool oldActive = m_active;
 
-    if (!m_active &&
-        event.type == sf::Event::EventType::MouseMoved &&
-        shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+    sf::Event::MouseMoved* mouseMoved = event->getIf<sf::Event::MouseMoved>();
+    if (!m_active && mouseMoved &&
+        shape.getGlobalBounds().contains(sf::Vector2f{mouseMoved->position}))
         m_active = true;
-    else if (m_active &&
-             event.type == sf::Event::EventType::MouseMoved &&
-             !shape.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+    else if (m_active && mouseMoved &&
+             !shape.getGlobalBounds().contains(sf::Vector2f{mouseMoved->position}))
         m_active = false;
 
     m_stateChangeCallback(shape, m_active);

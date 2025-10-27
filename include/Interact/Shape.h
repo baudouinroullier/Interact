@@ -34,7 +34,7 @@ public:
     sf::Shape* getShape();
     const sf::Shape* getShape() const;
 
-    bool processEvent(sf::Event e);
+    bool processEvent(std::optional<sf::Event> e);
 
 protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override

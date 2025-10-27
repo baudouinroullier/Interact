@@ -15,7 +15,7 @@ public:
     Drag(std::function<void(sf::Shape&, bool)>&& callback);
 
     void setStateChangeCallback(std::function<void(sf::Shape&, bool)> callback);
-    bool processEvent(sf::Event event, sf::Shape& shape) override;
+    bool processEvent(std::optional<sf::Event> event, sf::Shape& shape) override;
 
 protected:
     std::function<void(sf::Shape&, bool)> m_stateChangeCallback;

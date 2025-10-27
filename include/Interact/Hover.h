@@ -15,7 +15,7 @@ public:
     Hover(std::function<void(sf::Shape& shape, bool)>&& callback);
 
     void setStateChangeCallback(std::function<void(sf::Shape& shape, bool)> callback);
-    bool processEvent(sf::Event event, sf::Shape& shape) override;
+    bool processEvent(std::optional<sf::Event> event, sf::Shape& shape) override;
 
 protected:
 

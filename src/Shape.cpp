@@ -17,7 +17,7 @@ const sf::Shape* Shape::getShape() const
     return m_shape.get();
 }
 
-bool Shape::processEvent(sf::Event e)
+bool Shape::processEvent(std::optional<sf::Event> e)
 {
     for (auto& interaction : m_interactions)
     {
