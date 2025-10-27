@@ -15,4 +15,5 @@ set_target_properties(${LIB_NAME} PROPERTIES CXX_STANDARD 20 LINKER_LANGUAGE CXX
 target_include_directories(${LIB_NAME} PRIVATE "include/Interact")
 
 ## sfml
-target_link_libraries(${LIB_NAME} sfml-graphics sfml-window sfml-system)
+target_link_libraries(${LIB_NAME} SFML::Graphics SFML::Window SFML::System)
+target_include_directories(${LIB_NAME} PRIVATE "../../extlibs/SFML/include")
