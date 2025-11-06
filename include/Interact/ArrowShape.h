@@ -7,6 +7,7 @@ namespace act
 class ArrowShape : public sf::Drawable
 {
 public:
+    ArrowShape() : ArrowShape({},{}) {}
     ArrowShape(double width, sf::Color color);
 
     void setStartPosition(float x, float y);
